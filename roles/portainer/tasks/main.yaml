@@ -1,0 +1,53 @@
+---
+
+- name: Allow portainer ports in firewall
+  community.general.ufw:
+    insert: 1
+    rule: allow
+    port: "{{ item.port }}"
+    comment: "{{ item.comment }}"
+    proto: "{{ item.protocol }}"
+  loop:
+    - {port: "8000", comment: "ALLOW HTTP port", protocol: "tcp"}
+    - {port: "9443", comment: "ALLOW HTTPS port", protocol: "tcp"}
+  notify: Reload ufw
+
+
+- name: Ensure portainer directoy is created
+  ansible.builtin.file:
+    path: /portainer
+    owner: root
+    group: root
+    state: directory
+    mode: '0755'
+
+
+- name: Ensure portainer container is started
+  community.docker.docker_container:
+    name: portainer
+    image: "{{ portainer_image }}"
+    state: started
+    restart_policy: unless-stopped
+    pull: true
+    published_ports:
+      - "8000:8000"
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /portainer/portainer_data:/data
+    log_driver: json-file
+    log_options:
+      max-size: "10m"
+      max-file: "5"
+  notify: Restart docker
+
+
+- name: Remove old docker image versions
+  community.docker.docker_prune:
+    images: true
+    images_filters:
+      dangling: false
+
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers

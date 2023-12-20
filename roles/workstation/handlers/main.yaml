@@ -1,0 +1,53 @@
+---
+- name: Restart acpid
+  service:
+    name: acpid
+    state: restarted
+
+
+- name: Restart network manager
+  service:
+    name: NetworkManager
+    state: restarted
+
+
+- name: Restart cups
+  service:
+    name: cups
+    state: restarted
+
+
+- name: Restart bluetooth
+  service:
+    name: bluetooth
+    state: restarted
+
+
+- name: Restart libvirtd
+  service:
+    name: libvirtd
+    state: restarted
+
+
+- name: Restart lightdm
+  service:
+    name: lightdm
+    state: restarted
+
+
+- name: Restart zramd
+  service:
+    name: zramd
+    state: restarted
+
+
+- name: Restart snapd
+  service:
+    name: snapd
+    state: restarted
+
+
+- name: Reload transmission
+  service:
+    name: transmission
+    state: reloaded

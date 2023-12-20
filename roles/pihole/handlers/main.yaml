@@ -1,0 +1,17 @@
+---
+
+- name: Restart resolved
+  ansible.builtin.service:
+    name: systemd-resolved
+    state: restarted
+  listen: restart systemd-resolved
+
+- name: Restart docker
+  ansible.builtin.service:
+    name: docker
+    state: restarted
+  listen: restart systemd-resolved
+
+- name: Reload ufw
+  community.general.ufw:
+    state: reloaded

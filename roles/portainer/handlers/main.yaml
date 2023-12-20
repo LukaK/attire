@@ -1,0 +1,11 @@
+---
+
+- name: Reload ufw
+  community.general.ufw:
+    state: reloaded
+
+
+- name: Restart docker
+  ansible.builtin.service:
+    name: docker
+    state: restarted

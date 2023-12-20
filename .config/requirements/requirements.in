@@ -1,0 +1,4 @@
+pip
+pip-tools
+pre-commit
+yamllint

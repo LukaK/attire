@@ -1,0 +1,57 @@
+---
+
+
+- name: Allow portainer ports in firewall
+  community.general.ufw:
+    insert: 1
+    rule: allow
+    port: "{{ item.port }}"
+    comment: "{{ item.comment }}"
+    proto: "{{ item.protocol }}"
+  loop:
+    - {port: "8080", comment: "ALLOW HTTP port", protocol: "tcp"}
+    - {port: "1443", comment: "ALLOW HTTPS port", protocol: "tcp"}
+  notify: Reload ufw
+
+
+- name: Ensure heimdall directoy is created
+  ansible.builtin.file:
+    path: /heimdall
+    owner: root
+    group: root
+    state: directory
+    mode: '0755'
+
+
+- name: Ensure heimdall container is started
+  community.docker.docker_container:
+    name: heimdall
+    pull: true
+    image: "{{ heimdall_image }}"
+    state: started
+    restart_policy: unless-stopped
+    published_ports:
+      - "8080:80"
+      - "1443:443"
+    volumes:
+      - /heimdall:/config
+    env:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: "{{ timezone }}"
+    log_driver: json-file
+    log_options:
+      max-size: "10m"
+      max-file: "5"
+  notify: Restart docker
+
+
+- name: Remove old docker image versions
+  community.docker.docker_prune:
+    images: true
+    images_filters:
+      dangling: false
+
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers

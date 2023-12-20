@@ -1,0 +1,38 @@
+---
+
+- name: Comment out enterprise sources list
+  ansible.builtin.replace:
+    path: "{{ item }}"
+    regexp: '^([^#].*)'
+    replace: '#\1'
+  loop:
+    - /etc/apt/sources.list.d/pve-enterprise.list
+    - /etc/apt/sources.list.d/ceph.list
+
+  # TODO: Add variable for dns server
+- name: Create rsolv file
+  ansible.builtin.copy:
+    dest: /etc/resolv.conf
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      nameserver 10.0.10.94
+      nameserver 1.1.1.1
+      nameserver 8.8.8.8
+
+
+- name: Template a interface file
+  ansible.builtin.template:
+    src: interfaces.j2
+    dest: /etc/network/interfaces
+    owner: root
+    group: root
+    mode: '0644'
+
+
+# TODO: Add users for administrator?
+
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers

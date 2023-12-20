@@ -1,0 +1,9 @@
+---
+
+- import_playbook: pihole_config.yaml
+
+- import_playbook: portainer_config.yaml
+
+- import_playbook: heimdall_config.yaml
+
+- import_playbook: proxmox_config.yaml

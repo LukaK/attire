@@ -1,0 +1,16 @@
+---
+
+# TODO: Add logging daemon and open ssh rules
+- name: Ensure server is configured
+  hosts: pihole
+  become: true
+  roles:
+    - role: core
+    - role: update
+    - role: sshd
+    - role: vm_guest
+    - role: firewall
+    - role: docker
+    - role: portainer_node
+    - role: pihole
+      admin_password: "{{ pihole_password }}"

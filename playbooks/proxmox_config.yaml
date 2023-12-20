@@ -1,0 +1,11 @@
+---
+
+# TODO: Makni no valid subscritpion poruku na pocetku
+# do not run ssh hardening
+- name: Ensure server is configured
+  hosts: proxmox_servers
+  become: true
+  roles:
+    - role: core
+    - role: update
+    - role: proxmox
