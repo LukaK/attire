@@ -26,7 +26,7 @@
   become: true
   become_user: "{{ user.user_name }}"
   ansible.builtin.stat:
-    path: ~/.local/share/rofi/themes
+    path: ~/.local/share/rofi
   register: rofi_stat
 
 
@@ -34,7 +34,7 @@
   become: true
   become_user: "{{ user.user_name }}"
   ansible.builtin.file:
-    path: ~/.local/share/rofi
+    path: ~/.local/share
     state: directory
     mode: '0751'
 
@@ -43,7 +43,7 @@
   become_user: "{{ user.user_name }}"
   ansible.builtin.git:
     repo: 'https://github.com/newmanls/rofi-themes-collection.git'
-    dest: ~/.local/share/rofi/themes
+    dest: ~/.local/share/rofi
     depth: 1
     update: true
 

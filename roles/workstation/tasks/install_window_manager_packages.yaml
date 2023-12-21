@@ -149,7 +149,7 @@
 
 - name: Start snapd
   ansible.builtin.service:
-    name: snapd
+    name: snapd.socket
     state: started
     enabled: true
 
@@ -252,6 +252,18 @@
   loop:
     - cave.jpg
     - starry-sky.jpg
+
+
+- name: Setup lightdm
+  blockinfile:
+    path: /etc/lightdm/lightdm-gtk-greeter.conf
+    block: |
+      [greeter]
+      theme-name = NordArc-Theme
+      icon-theme-name = NordArc-Icons
+      background = /usr/share/backgrounds/starry-sky.jpg
+  notify: Restart lightdm
+
 
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers

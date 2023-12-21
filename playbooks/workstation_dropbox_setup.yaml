@@ -3,10 +3,11 @@
 - name: Setup system from dropbox sync
   hosts: workstations
   become: true
-  user: luka
   tasks:
 
     - name: Create workspace directory
+      become: true
+      become_user: luka
       ansible.builtin.file:
         path: ~/Workspace
         owner: luka
@@ -15,12 +16,15 @@
         mode: '0755'
 
     - name: Link directory
+      become: true
+      become_user: luka
       ansible.builtin.file:
         src: "{{ item.src }}"
         dest: "{{ item.dest }}"
         owner: luka
         group: luka
-        state: '0755'
+        mode: '0755'
+        state: link
       loop:
         - { src: "~/Dropbox/WorkSynced", dest: "~/Workspace/Sync" }
         - { src: "~/Dropbox/Archive", dest: "~/Archive" }

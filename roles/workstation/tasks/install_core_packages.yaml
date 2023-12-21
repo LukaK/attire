@@ -53,15 +53,12 @@
     enabled: true
 
 
-# TODO: Fix conflicting packages
 - name: Install network tools
   community.general.pacman:
     state: present
     update_cache: true
     name:
       - dnsutils
-      - openbsd-netcat
-      # - iptables-nft
       - ipset
       - net-tools
       - networkmanager
@@ -131,6 +128,7 @@
       - terminus-font
 
 
+# TODO: Fix conflicting packages
 - name: Install virtualization tools
   community.general.pacman:
     state: present
@@ -141,6 +139,9 @@
       - edk2-ovmf
       - bridge-utils
       - dnsmasq
+      - dmidecode
+      - openbsd-netcat
+      # - iptables-nft
       - vde2
   notify: Restart libvirtd
 
@@ -148,7 +149,6 @@
 - name: Start virtualization daemon
   ansible.builtin.service:
     name: libvirtd
-    state: started
     enabled: true
 
 
