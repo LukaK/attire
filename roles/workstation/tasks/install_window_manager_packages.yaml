@@ -154,6 +154,13 @@
     enabled: true
 
 
+- name: Link snap
+  ansible.builtin.file:
+    src: "/var/lib/snapd/snap"
+    dest: "/snap"
+    state: link
+
+
 - name: Install applications
   community.general.pacman:
     state: present
@@ -189,6 +196,13 @@
       - anki-bin
   become: true
   become_user: ansible
+
+
+- name: Install snap applications
+  community.general.snap:
+    name:
+      - obsidian
+    classic: true
 
 
 - name: Check if nordic theme is installed
