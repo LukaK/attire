@@ -14,23 +14,26 @@
     - { path: "/ca/csr", mode: '0755'}
 
 
-# TODO: Add passphrase for encrypting root ca key
 - name: Generate an OpenSSL private key
   community.crypto.openssl_privatekey:
     path: /ca/private/root-ca.key
     size: 4096
+    passphrase: "{{ root_ca_pass }}"
+    cipher: auto
 
-# TODO: Add passphrase for private key
+
 - name: Generate an openssl csr
   community.crypto.openssl_csr:
     path: /ca/csr/root-ca.csr
     privatekey_path: /ca/private/root-ca.key
+    privatekey_passphrase: "{{ root_ca_pass }}"
 
 
 - name: Generate a Self Signed OpenSSL certificate
   community.crypto.x509_certificate:
     path: /ca/certs/root-ca.crt
     privatekey_path: /ca/private/root-ca.key
+    privatekey_passphrase: "{{ root_ca_pass }}"
     csr_path: /ca/csr/root-ca.csr
     provider: selfsigned
     selfsigned_not_after: "+36500d"
@@ -38,22 +41,26 @@
 
 - name: Generate an OpenSSL private key
   community.crypto.openssl_privatekey:
-    path: /ca/private/pihole.lab.key
+    path: "/ca/private/{{ item.hostname }}.key"
     size: 2048
+  loop: "{{ ssl_configuration }}"
 
 
 - name: Generate an openssl csr
   community.crypto.openssl_csr:
-    path: /ca/csr/pihole.lab.csr
-    privatekey_path: /ca/private/pihole.lab.key
-    common_name: pihole.lab
+    path: "/ca/csr/{{ item.hostname }}.csr"
+    privatekey_path: /ca/private/{{ item.hostname }}.key
+    common_name: "{{ item.hostname }}"
+  loop: "{{ ssl_configuration }}"
 
 
 - name: Generate a Self Signed OpenSSL certificate
   community.crypto.x509_certificate:
-    path: /ca/certs/pihole.lab.crt
-    csr_path: /ca/csr/pihole.lab.csr
+    path: /ca/certs/{{ item.hostname }}.crt
+    csr_path: /ca/csr/{{ item.hostname }}.csr
     provider: ownca
     ownca_path: /ca/certs/root-ca.crt
     ownca_privatekey_path: /ca/private/root-ca.key
+    ownca_privatekey_passphrase: "{{ root_ca_pass }}"
     ownca_not_after: "+36500d"
+  loop: "{{ ssl_configuration }}"
