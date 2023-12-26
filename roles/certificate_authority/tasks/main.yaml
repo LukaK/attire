@@ -1,0 +1,59 @@
+---
+
+- name: Create ssl directories
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: "{{ item.mode }}"
+  loop:
+    - { path: "/ca/private", mode: '0700' }
+    - { path: "/ca/certs", mode: '0755'}
+    - { path: "/ca/newcerts", mode: '0755'}
+    - { path: "/ca/csr", mode: '0755'}
+
+
+# TODO: Add passphrase for encrypting root ca key
+- name: Generate an OpenSSL private key
+  community.crypto.openssl_privatekey:
+    path: /ca/private/root-ca.key
+    size: 4096
+
+# TODO: Add passphrase for private key
+- name: Generate an openssl csr
+  community.crypto.openssl_csr:
+    path: /ca/csr/root-ca.csr
+    privatekey_path: /ca/private/root-ca.key
+
+
+- name: Generate a Self Signed OpenSSL certificate
+  community.crypto.x509_certificate:
+    path: /ca/certs/root-ca.crt
+    privatekey_path: /ca/private/root-ca.key
+    csr_path: /ca/csr/root-ca.csr
+    provider: selfsigned
+    selfsigned_not_after: "+36500d"
+
+
+- name: Generate an OpenSSL private key
+  community.crypto.openssl_privatekey:
+    path: /ca/private/pihole.lab.key
+    size: 2048
+
+
+- name: Generate an openssl csr
+  community.crypto.openssl_csr:
+    path: /ca/csr/pihole.lab.csr
+    privatekey_path: /ca/private/pihole.lab.key
+    common_name: pihole.lab
+
+
+- name: Generate a Self Signed OpenSSL certificate
+  community.crypto.x509_certificate:
+    path: /ca/certs/pihole.lab.crt
+    csr_path: /ca/csr/pihole.lab.csr
+    provider: ownca
+    ownca_path: /ca/certs/root-ca.crt
+    ownca_privatekey_path: /ca/private/root-ca.key
+    ownca_not_after: "+36500d"

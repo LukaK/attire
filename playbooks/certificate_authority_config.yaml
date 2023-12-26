@@ -1,0 +1,12 @@
+---
+
+- name: Ensure ca server is configured
+  hosts: ca.lab
+  become: true
+  roles:
+    - role: core
+    - role: update
+    - role: sshd
+    - role: vm_guest
+    - role: firewall
+    - role: certificate_authority
