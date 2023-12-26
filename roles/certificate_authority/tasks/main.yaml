@@ -64,3 +64,5 @@
     ownca_privatekey_passphrase: "{{ root_ca_pass }}"
     ownca_not_after: "+36500d"
   loop: "{{ ssl_configuration }}"
+
+# TODO: Move certificates and private keys to the servers
