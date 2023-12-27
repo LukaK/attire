@@ -27,6 +27,13 @@
     path: /ca/csr/root-ca.csr
     privatekey_path: /ca/private/root-ca.key
     privatekey_passphrase: "{{ root_ca_pass }}"
+    common_name: Ansible CA
+    basic_constraints:
+      - 'CA:TRUE'
+    basic_constraints_critical: true
+    key_usage:
+      - keyCertSign
+    key_usage_critical: true
 
 
 - name: Generate a Self Signed OpenSSL certificate
@@ -64,5 +71,3 @@
     ownca_privatekey_passphrase: "{{ root_ca_pass }}"
     ownca_not_after: "+36500d"
   loop: "{{ ssl_configuration }}"
-
-# TODO: Move certificates and private keys to the servers
