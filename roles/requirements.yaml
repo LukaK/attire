@@ -3,5 +3,4 @@
 # collections:
 collections:
   - name: kewlfft.aur
-#   - name: pfsensible.core
-#     source: https://galaxy.ansible.com
+  - name: pfsensible.core
