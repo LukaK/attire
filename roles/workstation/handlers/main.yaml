@@ -51,3 +51,7 @@
   service:
     name: transmission
     state: reloaded
+
+- name: Update trusted certificates
+  ansible.builtin.command:
+    cmd: 'update-ca-trust'

@@ -17,6 +17,9 @@
 - name: Include transmission
   ansible.builtin.include_tasks: install_transmission.yaml
 
+- name: Include installation of root certificate
+  ansible.builtin.include_tasks: install_root_certificate.yaml
+
 - name: Configure user
   ansible.builtin.include_tasks: user_configuration.yaml
   loop: "{{ users }}"
