@@ -55,3 +55,11 @@
 - name: Update trusted certificates
   ansible.builtin.command:
     cmd: 'update-ca-trust'
+
+
+# TODO: Uncomment fail condition when issue with exit codes is fixed
+- name: Build initramd
+  ansible.builtin.command: /usr/bin/mkinitcpio -p linux
+  changed_when: true
+  # failed_when: mkinitcpio_result.rc != 0
+  failed_when: false
