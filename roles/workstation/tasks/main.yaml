@@ -11,7 +11,9 @@
 - name: Include instalation of core packages
   ansible.builtin.include_tasks: install_core_packages.yaml
 
-# TODO: Include nvidia driver installation if it has nvidia gpu
+- name: Include nvidia drivers
+  ansible.builtin.include_tasks: install_nvidia_drivers.yaml
+  when: install_nvidia_driver
 
 - name: Include window manager tasks
   ansible.builtin.include_tasks: install_window_manager_packages.yaml

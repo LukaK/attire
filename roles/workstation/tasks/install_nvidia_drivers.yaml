@@ -35,7 +35,9 @@
     line: 'MODULES=(btrfs nvidia nvidia_modeset nvidia_uvm nvidia_drm)'
     state: present
     backrefs: true
-  notify: Build initramd
+  notify:
+    - Build initramd
+    - Reboot the system
 
 
 # TODO: Add mode explicitly
