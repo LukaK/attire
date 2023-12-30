@@ -67,4 +67,3 @@
 
 - name: Reboot the system
   ansible.builtin.reboot:
-  when: reboot_required.stat.exists

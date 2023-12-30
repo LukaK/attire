@@ -1,15 +1,5 @@
 ---
 
-- name: Install paru package
-  kewlfft.aur.aur:
-    use: auto
-    state: present
-    name:
-      - paru
-  become: true
-  become_user: ansible
-
-
 - name: Install development tools
   community.general.pacman:
     state: present

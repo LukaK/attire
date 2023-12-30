@@ -11,6 +11,15 @@
 - name: Include instalation of core packages
   ansible.builtin.include_tasks: install_core_packages.yaml
 
+- name: Install paru package
+  kewlfft.aur.aur:
+    use: auto
+    state: present
+    name:
+      - paru
+  become: true
+  become_user: ansible
+
 - name: Include nvidia drivers
   ansible.builtin.include_tasks: install_nvidia_drivers.yaml
   when: install_nvidia_driver
