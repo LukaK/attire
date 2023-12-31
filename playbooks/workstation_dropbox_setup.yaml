@@ -1,5 +1,6 @@
 ---
 
+# TODO: Add other users except luka or remove it after migrating from dropbox
 - name: Setup system from dropbox sync
   hosts: workstations
   become: true
