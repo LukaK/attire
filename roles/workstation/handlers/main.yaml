@@ -65,5 +65,6 @@
   failed_when: false
 
 
+# TODO: Add to wait for reconnection
 - name: Reboot the system
   ansible.builtin.reboot:

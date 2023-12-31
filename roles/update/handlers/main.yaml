@@ -1,4 +1,5 @@
 ---
 
+# TODO: Add waith for reconnection
 - name: Reboot
   ansible.builtin.reboot: {}

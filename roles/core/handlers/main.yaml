@@ -1,5 +1,6 @@
 ---
 
+# TODO: Add wait for reconnection
 - name: Reboot the system
   ansible.builtin.reboot:
 
