@@ -59,6 +59,7 @@
     update_cache: true
     name:
       - dnsutils
+      - nmap
       - ipset
       - net-tools
       - networkmanager

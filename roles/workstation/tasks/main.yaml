@@ -24,6 +24,9 @@
   ansible.builtin.include_tasks: install_nvidia_drivers.yaml
   when: install_nvidia_driver
 
+- name: Install avahi
+  ansible.builtin.include_tasks: install_avahi.yaml
+
 - name: Include window manager tasks
   ansible.builtin.include_tasks: install_window_manager_packages.yaml
 

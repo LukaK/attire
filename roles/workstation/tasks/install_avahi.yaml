@@ -1,0 +1,26 @@
+---
+
+- name: Install avahi daemon
+  community.general.pacman:
+    state: present
+    name:
+      - avahi
+
+- name: Start avahi daemon
+  ansible.builtin.service:
+    name: avahi-daemon
+    state: started
+    enabled: true
+
+
+- name: Configure avahi
+  ansible.builtin.lineinfile:
+    path: "/etc/nsswitch.conf"
+    regexp: '^(hosts: ((?!mdns_minimal).)*) (?P<end>resolve .*)$'
+    line: '\1 mdns_minimal [NOTFOUND=return] \g<end>'
+    backrefs: true
+  notify: Restart avahi
+
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers

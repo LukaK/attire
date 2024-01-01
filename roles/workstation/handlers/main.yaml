@@ -47,6 +47,12 @@
     state: restarted
 
 
+- name: Restart avahi
+  service:
+    name: avahi-daemon
+    state: restarted
+
+
 - name: Reload transmission
   service:
     name: transmission
