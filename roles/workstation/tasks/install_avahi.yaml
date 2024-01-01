@@ -5,6 +5,7 @@
     state: present
     name:
       - avahi
+      - nss-mdns
 
 - name: Start avahi daemon
   ansible.builtin.service:
