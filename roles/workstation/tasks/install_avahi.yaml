@@ -1,5 +1,6 @@
 ---
 
+# TODO: Group together with cups? Neede for network printers
 - name: Install avahi daemon
   community.general.pacman:
     state: present
