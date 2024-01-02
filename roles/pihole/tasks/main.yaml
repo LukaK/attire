@@ -5,13 +5,38 @@
     file: "{{ ansible_facts['distribution'] | lower }}_setup.yaml"
 
 
-- name: Ensure pihole directoy is created
+- name: Ensure pihole directories are created
   ansible.builtin.file:
-    path: /pihole
+    path: "{{ item }}"
     owner: root
     group: root
     state: directory
     mode: '0755'
+  loop:
+    - /pihole
+    - /pihole/pihole
+    - /pihole/dnsmasq.d
+    - /pihole/lighttpd/
+
+
+# TODO: Convert external.conf to template
+# TODO: Rest pihole explicitly
+- name: Copy pihole configuration files
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: '0644'
+  loop:
+    - {src: 'custom.list', dest: '/pihole/pihole/custom.list'}
+    - {src: 'external.conf', dest: '/pihole/lighttpd/external.conf'}
+
+
+- name: Copy certificate files
+  ansible.builtin.copy:
+    dest: "/pihole/lighttpd/combined.pem"
+    content: "{{ ssl_key }}{{ ssl_cert }}"
 
 
 - name: Ensure pihole container is started
@@ -33,6 +58,8 @@
     volumes:
       - "/pihole/pihole/:/etc/pihole"
       - "/pihole/dnsmasq.d/:/etc/dnsmasq.d/"
+      - "/pihole/lighttpd/external.conf:/etc/lighttpd/conf-enabled/external.conf"
+      - "/pihole/lighttpd/combined.pem:/etc/lighttpd/combined.pem"
     log_driver: json-file
     log_options:
       max-size: "10m"
@@ -44,15 +71,6 @@
     images: true
     images_filters:
       dangling: false
-
-
-- name: Copy custom dns entries
-  ansible.builtin.copy:
-    src: custom.list
-    dest: /pihole/pihole/custom.list
-    owner: root
-    group: root
-    mode: '0644'
 
 
 - name: Allow pihole ports in firewall
