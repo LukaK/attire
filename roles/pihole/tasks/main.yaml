@@ -18,21 +18,30 @@
     - /pihole/dnsmasq.d
     - /pihole/lighttpd/
 
+- name: Set path to the pem file
+  ansible.builtin.set_fact:
+    pihole_pem_path: /etc/lighttpd/combined.pem
 
-# TODO: Convert external.conf to template
-# TODO: Rest pihole explicitly
-- name: Copy pihole configuration files
+
+# TODO: Restart container explicitly
+- name: Copy custom dns list
   ansible.builtin.copy:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
+    src: "custom.list"
+    dest: "/pihole/pihole/custom.list"
     owner: root
     group: root
     mode: '0644'
-  loop:
-    - {src: 'custom.list', dest: '/pihole/pihole/custom.list'}
-    - {src: 'external.conf', dest: '/pihole/lighttpd/external.conf'}
+
+- name: Copy external configuration
+  ansible.builtin.template:
+    src: external.conf.j2
+    dest: /pihole/lighttpd/external.conf
+    owner: root
+    group: root
+    mode: '0644'
 
 
+# TODO: Set permissions
 - name: Copy certificate files
   ansible.builtin.copy:
     dest: "/pihole/lighttpd/combined.pem"

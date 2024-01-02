@@ -4,7 +4,7 @@ setenv.add-environment = ("fqdn" => "true")
 # Enable the SSL engine with a LE cert, only for this specific host
 $SERVER["socket"] == ":443" {
 	ssl.engine = "enable"
-	ssl.pemfile = "/etc/lighttpd/combined.pem"
+	ssl.pemfile = "{{ pihole_pem_path }}"
 	ssl.honor-cipher-order = "enable"
 	ssl.cipher-list = "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH"
 	ssl.use-sslv2 = "disable"
