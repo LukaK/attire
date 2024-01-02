@@ -1,7 +1,7 @@
 ---
 
 - name: Ensure server is configured
-  hosts: portainer
+  hosts: portainer.lab
   become: true
   roles:
     - role: core

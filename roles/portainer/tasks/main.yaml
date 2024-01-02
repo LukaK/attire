@@ -21,6 +21,18 @@
     state: directory
     mode: '0755'
 
+- name: Copy ssl certificate to the server
+  ansible.builtin.copy:
+    dest: "/portainer/portainer.lab.crt"
+    content: "{{ ssl_cert }}"
+    mode: '0644'
+
+- name: Copy ssl key to the server
+  ansible.builtin.copy:
+    dest: "/portainer/portainer.lab.key"
+    content: "{{ ssl_key }}"
+    mode: '0600'
+
 
 - name: Ensure portainer container is started
   community.docker.docker_container:
@@ -35,6 +47,8 @@
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /portainer/portainer_data:/data
+      - /portainer/portainer.lab.crt:/data/certs/cert.pem
+      - /portainer/portainer.lab.key:/data/certs/key.pem
     log_driver: json-file
     log_options:
       max-size: "10m"

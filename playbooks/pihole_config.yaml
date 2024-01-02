@@ -2,7 +2,7 @@
 
 # TODO: Add logging daemon and open ssh rules
 - name: Ensure server is configured
-  hosts: pihole
+  hosts: pihole.lab
   become: true
   roles:
     - role: core
