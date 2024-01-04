@@ -53,11 +53,12 @@
   loop: "{{ ssl_configuration }}"
 
 
+# TODO: Get ip addresses from inventory
 - name: Generate an openssl csr
   community.crypto.openssl_csr:
     path: "/ca/csr/{{ item.hostname }}.csr"
     privatekey_path: /ca/private/{{ item.hostname }}.key
-    common_name: "{{ item.hostname }}"
+    subject_alt_name: "{{ item.subject_alt_name }}"
   loop: "{{ ssl_configuration }}"
 
 
