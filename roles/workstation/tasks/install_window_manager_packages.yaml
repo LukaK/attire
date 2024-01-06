@@ -23,6 +23,11 @@
       - python-virtualenvwrapper
       - jdk-openjdk
       - python-pynvim
+        # go development environment
+      - go
+      - goreleaser  # release automation tool
+      - ko          # for building images
+      - yaegi       # interpreter
 
 
 - name: Install aur development tools
