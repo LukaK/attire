@@ -23,6 +23,7 @@
       - python-virtualenvwrapper
       - jdk-openjdk
       - python-pynvim
+      - python-poetry
         # go development environment
       - go
       - goreleaser  # release automation tool
